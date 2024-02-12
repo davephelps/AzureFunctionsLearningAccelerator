@@ -1,0 +1,104 @@
+{
+	"name": "authsettingsV2",
+	"type": "Microsoft.Web/sites/config",
+	"location": "{your_region}",
+	"tags": {},
+	"properties": {
+		"platform": {
+			"enabled": true,
+			"runtimeVersion": "~1"
+		},
+		"globalValidation": {
+			"requireAuthentication": true,
+			"unauthenticatedClientAction": "RedirectToLoginPage"
+		},
+		"identityProviders": {
+			"azureActiveDirectory": {
+				"enabled": true,
+				"registration": {
+					"openIdIssuer": "https://sts.windows.net{your_tenant_id}/",
+					"clientId": "{client id from the Function App Registration}"
+				},
+				"login": {
+					"disableWWWAuthenticate": false
+				},
+				"validation": {
+					"jwtClaimChecks": {},
+					"allowedAudiences": [
+						"https://yourtenant.onmicrosoft.com/sales/fulfilment"
+					],
+					"defaultAuthorizationPolicy": {
+						"allowedPrincipals": {
+							"identities": [
+								"{object id to restrict}",
+								"{object id to restrict}"
+								]
+						},
+                        "allowedApplications": [
+                            "{client id to restrict}",
+                            "{client id to restrict}"
+                        ]
+					}
+				}
+			}
+		},
+		"facebook": {
+			"enabled": false,
+			"registration": {},
+			"login": {}
+		},
+		"gitHub": {
+			"enabled": false,
+			"registration": {},
+			"login": {}
+		},
+		"google": {
+			"enabled": false,
+			"registration": {},
+			"login": {},
+			"validation": {}
+		},
+		"twitter": {
+			"enabled": false,
+			"registration": {}
+		},
+		"legacyMicrosoftAccount": {
+			"enabled": false,
+			"registration": {},
+			"login": {},
+			"validation": {}
+		},
+		"apple": {
+			"enabled": false,
+			"registration": {},
+			"login": {}
+		}
+	},
+	"login": {
+		"routes": {},
+		"tokenStore": {
+			"enabled": false,
+			"tokenRefreshExtensionHours": 72.0,
+			"fileSystem": {},
+			"azureBlobStorage": {}
+		},
+		"preserveUrlFragmentsForLogins": false,
+		"cookieExpiration": {
+			"convention": "FixedTime",
+			"timeToExpiration": "08:00:00"
+		},
+		"nonce": {
+			"validateNonce": true,
+			"nonceExpirationInterval": "00:05:00"
+		}
+	},
+	"httpSettings": {
+		"requireHttps": true,
+		"routes": {
+			"apiPrefix": "/.auth"
+		},
+		"forwardProxy": {
+			"convention": "NoProxy"
+		}
+	}
+}

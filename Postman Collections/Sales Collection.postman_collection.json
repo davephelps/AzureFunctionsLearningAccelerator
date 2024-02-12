@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "d332df0d-aa44-410a-b94c-94550eb11db3",
+		"name": "Sales Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14964036"
+	},
+	"item": [
+		{
+			"name": "Contoso Sales - SAS URL",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productName\":\"Surface Laptop 4\",\r\n    \"productId\": \"123\",\r\n    \"quantity\": \"2\",\r\n    \"customer\": {\r\n        \"name\": \"Charlie Brown\",\r\n        \"address\": \"1 Winding Road, Cheltenham\",\r\n        \"mobile\": \"12345\",\r\n        \"email\": \"user@user.com\"\r\n  }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://yourfunctionurl",
+					"protocol": "https",
+					"host": [
+						"yourfunctionurl"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contoso Sales - Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"        var json = JSON.parse(responseBody);\r",
+							"        postman.setEnvironmentVariable(\"SalesBearer\", json.access_token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "useBrowser",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "grant_type",
+							"value": "implicit",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Restrict-Access-To-Tenants",
+						"value": "microsoft.onmicrosoft.com",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "scope",
+							"value": "https://your application id/.default",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "your client id",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "your secret",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/your_tenant_id/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"your_tenant_id",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contoso Sales - Azure AD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{SalesBearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://yourfunctionurl",
+					"protocol": "https",
+					"host": [
+						"yourfunctionurl"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

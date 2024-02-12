@@ -1,0 +1,13 @@
+{
+    "id" : "1",
+    "productName":"Surface Laptop 4",
+    "region" : "UK",
+    "productId": "123",
+    "quantity": "2",
+    "customer": {
+        "name": "Dave Phelps",
+        "address": "1 Winding Road, Cheltenham",
+        "mobile": "12345",
+        "email": "user@someurl.com"
+  }
+}

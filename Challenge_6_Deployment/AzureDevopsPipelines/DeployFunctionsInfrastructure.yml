@@ -1,0 +1,49 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more: 
+# https://aka.ms/yaml
+
+#trigger:
+#- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'spadoprakashnonprodowner'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az bicep install'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'spadoprakashnonprodowner'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az group create -n rg-functions-sct -l westeurope'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'spadoprakashnonprodowner'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az deployment group create --resource-group rg-functions-sct --parameters bicep/main.bicepparam'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'spadoprakashnonprodowner'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az deployment group create --resource-group rg-functions-sct --parameters bicep/sqlServerandDB.bicepparam'
+
+- task: CopyFiles@2
+  inputs:
+    Contents: 'Code/**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
