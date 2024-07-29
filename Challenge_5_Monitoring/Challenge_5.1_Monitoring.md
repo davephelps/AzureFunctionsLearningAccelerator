@@ -85,7 +85,7 @@ To log custom data to Application Insights, the following is a straightforward w
             Activity.Current.AddTag("OrderId", orderId);
             Activity.Current.AddTag("Quantity", quantity);
 ```
-*Activity.Current.AddTag* will create a custom entry in the *Requests* table.
+*Activity.Current.AddTag* will create a custom entry in the Application Insights telemetry. For in-process Functions, the custom data is added to the *Requests* table. For isolated Functions however, custom data logged using *AddTag* is written to the *Dependencies* table, so an additional join is required.
 
 Using the above code snippet as a guide, update the *ContosoOrder* function to log ProductName, OrderId and Quantity. We can then write queries based on the custom data logged. 
 
@@ -96,7 +96,10 @@ To return the product name, we can use the following query:
 ```
 requests
 | where name =='ContosoOrder'
-| extend ProductName = customDimensions.ProductName
+| join kind=leftouter ( dependencies
+    | where type == 'InProc'
+    | extend ProductName = customDimensions.ProductName
+  ) on $left.id == $right.operation_ParentId
 | order by timestamp desc
 ```
 
@@ -105,10 +108,14 @@ We can also retrieve the quantity for each product:
 ```
 requests
 | where name =='ContosoOrder'
-| extend ProductName = customDimensions.ProductName
-| extend Quantity = customDimensions.Quantity
+| join kind=leftouter ( dependencies
+    | where type == 'InProc'
+    | extend ProductName = customDimensions.ProductName
+    | extend Quantity = customDimensions.Quantity
+  ) on $left.id == $right.operation_ParentId
 | order by timestamp desc
 ```
+
 ![Product and Quantity](<../images/Application Insights - Query on Product and Quantity.png>)
 
 We can then create a pie chart based on how many products were sold:

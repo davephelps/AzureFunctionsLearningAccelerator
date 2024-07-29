@@ -14,6 +14,7 @@ Ensure you add your own username to have permission to administer secrets by nav
 ![Add Role Assignment](<images/KeyVault - Add Role Assignment.png>)
 
 Create a new secret value for the Service Bus Connection string:
+
 ![Create Secret](<images/KeyVault - Create Secret.png>)
 
 Grant access to allow the Function App to have read access to the secret by clicking the secret then clicking Access control (IAM) and adding the Function App Managed Identity as a Key Vault Secrets User:

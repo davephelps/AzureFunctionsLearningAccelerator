@@ -7,7 +7,7 @@ We will use Visual Studio, although the steps are very similar if using Visual S
 # Pre-requisites
 
 * Visual Studio 2022
-* .NET 6.0 or above
+* .NET 8.0 or above
 * Azure Functions Core Tools v4 or above
 
 ## Create an Azure Functions project using Visual Studio 2022
@@ -16,7 +16,9 @@ First, Install the Azure Functions extension for Visual Studio through the Visua
 
 Open Visual Studio and create a new Azure Functions project by selecting "File" > "New" > "Project" > "Azure Functions" and select "HTTP trigger" as the template for the new function.
 
- Azure Functions supports two types of runtime, *in-process* and *isolated*. In-Process functions run in the same process as the Function runtime, so application function code must be developed in a .NET version supported by the runtime. There is a lot more flexibility with the Isolated runtime, where the runtime dependencies do not affect the function code. For example, .NET Framework could be used for application code. There are some differences in how functions are developed when using Isolated, please see [this link](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-in-process-differences) for more details. For this challenge, please use **in process** as follows:
+ Azure Functions supports two types of runtime, *in-process* and *isolated*. In-Process functions run in the same process as the Function runtime, so application function code must be developed in a .NET version supported by the runtime. At the time of writing, in-process functions are deprecated with support being removed 10th November, 2026.
+ 
+ There is a lot more flexibility with the Isolated runtime, where the runtime dependencies do not affect the function code. For example, .NET Framework could be used for application code. There are some differences in how functions are developed when using Isolated, please see [this link](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-in-process-differences) for more details. For this challenge we will create an **Isolated** Function in as follows:
 
  ![Create Function App](<../images/Create Function.png>)
 
